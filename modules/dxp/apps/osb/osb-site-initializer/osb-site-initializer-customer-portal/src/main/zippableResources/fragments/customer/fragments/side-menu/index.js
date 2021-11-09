@@ -10,7 +10,7 @@
  * distribution rights of the Software.
  */
 
-const getAccountSubscriptionGroupsByFilter = (filter) => ({
+ const getAccountSubscriptionGroupsByFilter = (filter) => ({
   query: `{
       c {
         accountSubscriptionGroups(filter: "accountKey eq '${filter}' and hasActivation eq true") {
@@ -43,18 +43,18 @@ const getSubscriptionKey = (name) => {
 }
 
 const htmlElement = (name, key) => {
-  return `<li><a href="#" class="btn-sm text-link-md d-flex text-decoration-none text-neutral-10 pr-0">
-  <img class="mr-2" width="16" src="http://localhost:8080/webdav/cp-3.0/document_library/assets/navigation-menu/${key}_icon_gray.svg" alt="" />
+  return `<li><a href="#" class="btn btn-sm btn-menu">
+  <img class="mr-2" width="16" src="${window.location.origin}/webdav/cp-3.0/document_library/assets/navigation-menu/${key}_icon_gray.svg" alt="" />
   ${name}
 </a></li>`;
 }
 
-const buttonStyle = "bg-brand-primary-lighten-5 btn btn-borderless btn-primary btn-sm d-flex font-weight-bolder text-brand-primary py-2 rounded";
-const linkStyle = "btn-sm text-link-md d-flex text-decoration-none text-neutral-10 pr-0";
-
+const arrowToggleElementKey = 'customer-portal-arrow';
 const koroneikiApplicationIdKey = 'customer-portal-koroneiki-application';
+const productsElementKey = '#customer-portal-products';
+
 const koroneikiApplication = sessionStorage.getItem(koroneikiApplicationIdKey);
-const currentProducts = fragmentElement.querySelector("#customer-portal-products");
+const currentProducts = fragmentElement.querySelector(productsElementKey);
 let expandedHeightProducts;
 
 (async () => {
@@ -76,8 +76,15 @@ let expandedHeightProducts;
 })();
 
 fragmentElement.addEventListener("click", (event) => {
-  if (event.target.id === "customer-portal-toggle-products" || event.target.id === "customer-portal-arrow") {
-    const products = fragmentElement.querySelector("#customer-portal-products");
+  const lastButton = fragmentElement.querySelector('.active');
+  let currentButton = event.target;
+
+  if (currentButton.tagName === "IMG") {
+    currentButton = currentButton.parentElement;
+  }
+
+  if (event.target.id === "customer-portal-toggle-products" || event.target.id === arrowToggleElementKey) {
+    const products = fragmentElement.querySelector(productsElementKey);
     const heightProducts = products.offsetHeight;
 
     if (heightProducts < expandedHeightProducts) {
@@ -86,21 +93,14 @@ fragmentElement.addEventListener("click", (event) => {
       currentProducts.style.height = "0px";
     }
 
-    const arrow = fragmentElement.querySelector("#customer-portal-arrow");
+    const arrow = fragmentElement.querySelector(`#${arrowToggleElementKey}`);
     arrow.classList.toggle("left");
     arrow.classList.toggle("down");
-  } else if (event.target.classList.contains("text-link-md") || event.target.tagName === "IMG") {
-    const lastButton = fragmentElement.querySelector(".btn");
-    let currentButton = event.target;
+  } else if (lastButton !== currentButton && currentButton.tagName === "A") {
+    currentButton.classList.toggle('active');
+    lastButton.classList.toggle('active');
 
-    if (currentButton.tagName === "IMG") {
-      currentButton = currentButton.parentElement;
-    }
-
-    lastButton.className = linkStyle;
-    currentButton.className = buttonStyle;
-
-    if (currentButton.children[0]) {
+    if (currentButton.children[0] && currentButton.children[0].src) {
       let srcIcon = currentButton.children[0].src;
       if (srcIcon.substr(srcIcon.length - 3) !== "svg") {
         srcIcon = srcIcon.split("/");
@@ -111,7 +111,7 @@ fragmentElement.addEventListener("click", (event) => {
       currentButton.children[0].src = srcIcon.replace("_gray", "");
     }
 
-    if (lastButton !== currentButton && lastButton.children[0]) {
+    if (lastButton.children[0] && lastButton.children[0].src) {
       let srcIcon = lastButton.children[0].src;
 
       if (srcIcon.substr(srcIcon.length - 3) !== "svg") {
@@ -125,6 +125,7 @@ fragmentElement.addEventListener("click", (event) => {
 
     const toggleProducts = fragmentElement.querySelector("#customer-portal-toggle-products");
     const grandParentElementId = currentButton.parentElement.parentElement.id;
+
     if ((grandParentElementId === "customer-portal-products" && toggleProducts.classList.contains("text-neutral-10")) || (toggleProducts.classList.contains("text-brand-primary") && grandParentElementId !== "customer-portal-products")) {
       toggleProducts.classList.toggle("text-neutral-10");
       toggleProducts.classList.toggle("text-brand-primary");

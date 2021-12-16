@@ -2,7 +2,7 @@ import ClayForm, {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {useField} from 'formik';
-import {required, validate} from '../utils/validations.form';
+import {isValidEmail, required, validate} from '../utils/validations.form';
 import WarningBadge from './WarningBadge';
 
 const Input = ({
@@ -13,6 +13,12 @@ const Input = ({
 	validations,
 	...props
 }) => {
+	if (props.type === 'email') {
+		validations = validations
+			? [(value) => isValidEmail(value), ...validations]
+			: [(value) => isValidEmail(value)];
+	}
+
 	if (props.required) {
 		validations = validations
 			? [...validations, (value) => required(value)]

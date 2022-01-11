@@ -35,6 +35,12 @@ const setSrcIcon = (keybutton) => {
 
 	return srcIcon;
 };
+const activeProductsId = '#customer-portal-toggle-products';
+const teamMembersId = '#custumer-portal-members';
+const overviewId = '#custumer-portal-overview';
+const activeProducts = fragmentElement.querySelector(activeProductsId);
+const teamMembers = fragmentElement.querySelector(teamMembersId);
+const overview = fragmentElement.querySelector(overviewId);
 
 const arrowToggleElementKey = 'customer-portal-arrow';
 const productsElementKey = '#customer-portal-products';
@@ -54,6 +60,12 @@ let expandedHeightProducts;
 					)
 					.join('\n');
 
+				if (accountSubscriptionGroups) {
+					overview.classList.toggle('skeleton');
+					teamMembers.classList.toggle('skeleton');
+					activeProducts.classList.toggle('skeleton');
+				}
+
 				const buttons =
 					fragmentElement.querySelectorAll(
 						'.customer-portal-side-menu-button'
@@ -72,8 +84,7 @@ let expandedHeightProducts;
 				);
 			}
 		);
-	}
-	catch (error) {
+	} catch (error) {
 		console.error(error.message);
 	}
 })();
@@ -95,8 +106,7 @@ fragmentElement.addEventListener('click', (event) => {
 
 		if (heightProducts < expandedHeightProducts) {
 			currentProducts.style.height = `${expandedHeightProducts}px`;
-		}
-		else {
+		} else {
 			currentProducts.style.height = '0px';
 		}
 
@@ -105,8 +115,7 @@ fragmentElement.addEventListener('click', (event) => {
 		);
 		arrow.classList.toggle('left');
 		arrow.classList.toggle('down');
-	}
-	else if (
+	} else if (
 		lastButton !== currentButton &&
 		currentButton.tagName === 'BUTTON'
 	) {

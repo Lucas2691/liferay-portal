@@ -262,6 +262,19 @@ export const getKoroneikiAccounts = gql`
 	}
 `;
 
+export const getListTypeDefinitions = gql`
+	query getListTypeDefinitions($filter: String) {
+		listTypeDefinitions(filter: $filter) {
+			items {
+				listTypeEntries {
+					key
+					name
+				}
+			}
+		}
+	}
+`;
+
 export const getUserAccount = gql`
 	query getUserAccount($id: Long!) {
 		userAccount(userAccountId: $id) {

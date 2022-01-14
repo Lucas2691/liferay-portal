@@ -8,9 +8,22 @@
  * permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
  */
+import DeveloperKeysLayouts from '../../components/DeveloperKeysLayout';
+import {useCustomerPortal} from '../../context';
 
 const DXPCloud = () => {
-	return <div>DXP Cloud page</div>;
+	const [{project}] = useCustomerPortal();
+
+	return (
+		<>
+			<DeveloperKeysLayouts>
+				<DeveloperKeysLayouts.Inputs
+					accountKey={project.accountKey}
+					dxpVersion={project.dxpVersion}
+				></DeveloperKeysLayouts.Inputs>
+			</DeveloperKeysLayouts>
+		</>
+	);
 };
 
 export default DXPCloud;

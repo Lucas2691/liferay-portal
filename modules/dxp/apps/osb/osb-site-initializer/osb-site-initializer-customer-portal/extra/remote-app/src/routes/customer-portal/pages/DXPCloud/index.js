@@ -9,20 +9,16 @@
  * distribution rights of the Software.
  */
 import DeveloperKeysLayouts from '../../components/DeveloperKeysLayout';
-import {useCustomerPortal} from '../../context';
 
-const DXPCloud = () => {
-	const [{page, project}] = useCustomerPortal();
-	// eslint-disable-next-line no-console
-	console.log(page);
-
+const DXPCloud = ({project, sessionId}) => {
 	return (
 		<>
 			<DeveloperKeysLayouts>
 				<DeveloperKeysLayouts.Inputs
 					accountKey={project.accountKey}
 					dxpVersion={project.dxpVersion}
-					page="dxp-cloud"
+					productTitle="DXP Cloud"
+					sessionId={sessionId}
 				></DeveloperKeysLayouts.Inputs>
 			</DeveloperKeysLayouts>
 		</>

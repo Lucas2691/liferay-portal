@@ -12,7 +12,9 @@ import DeveloperKeysLayouts from '../../components/DeveloperKeysLayout';
 import {useCustomerPortal} from '../../context';
 
 const DXPCloud = () => {
-	const [{project}] = useCustomerPortal();
+	const [{page, project}] = useCustomerPortal();
+	// eslint-disable-next-line no-console
+	console.log(page);
 
 	return (
 		<>
@@ -20,6 +22,7 @@ const DXPCloud = () => {
 				<DeveloperKeysLayouts.Inputs
 					accountKey={project.accountKey}
 					dxpVersion={project.dxpVersion}
+					page="dxp-cloud"
 				></DeveloperKeysLayouts.Inputs>
 			</DeveloperKeysLayouts>
 		</>
